@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>练习2</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style type="text/css">
+        .big {
+            font-size: 40px;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div v-bind:class="{big:isBig,red:isRed,bold:isBold}" v-text="message">
+        </div>
+        <p v-bind:class=[a,b]>{{message}}</p>
+
+        <!-- 显示、隐藏 -->
+        <div v-show="isShow">show info</div>
+
+
+        <div id="inner_box">123</div>
+
+        <box2 :msg="arr2" :msg2="arr"></box2>
+
+    </div>
+
+
+    <div id="box2">{{msg2}}</div>
+</body>
+<script>
+    Vue.component('#box2', {
+        props: {
+            msg2: String
+        },
+        data: function () {
+            return {
+                msg: '你好'
+            }
+        },
+        template: "<p>{{msg}}11111111</p>"
+    })
+</script>
+<script type="text/javascript">
+
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            message: '123',
+            isBig: 1,
+            isRed: 1,
+            isBold: 1,
+            a: 'big',
+            b: 'bold',
+            isShow: true,
+            arr: {
+                a: 1,
+                b: 2
+            },
+            arr2: [1, 2, 3]
+        },
+        mouted() {
+            // 创建构造器
+            var Profile = Vue.extend({
+                template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
+                data: function () {
+                    return {
+                        firstName: 'Walter',
+                        lastName: 'White',
+                        alias: 'Heisenberg'
+                    }
+                }
+            })
+            // 创建 Profile 实例，并挂载到一个元素上。
+            new Profile().$mount('#inner_box')
+        }
+    })
+</script>
+
+</html>

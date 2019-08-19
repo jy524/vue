@@ -1,0 +1,98 @@
+<html>
+	<head>
+		<title>练习</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	</head>
+	<body>
+		<div id="box">
+			<p v-once>{{message}}</p>
+			<p v-bind:title="message" v-on:click="tips">{{message}}</p>
+			<input type="text" v-model="message"/>
+			<div :title="message2" @click="tips2">
+				{{message2}}
+			</div>
+			<template v-if="seen">
+				<p v-for="item in arr">
+					{{item.text}}
+				</p>
+			</template>
+			
+			<pick_area class="a b" v-for="item in arr" v-bind:item="item"  @click="tips"></pick_area>
+			
+			<p>{{html}}</p>
+			<p v-text='message' v-html='html' v-bind:[attr]="id">{{html}}</p>
+			<!-- 计算属性 -->
+			<p>{{change_message}}</p>
+			<!-- 方法 -->
+			<p>{{change_message2() }}</p>
+
+
+			<!-- 计算属性示例2 -->
+			<p>{{fullName}}</p>
+		</div>
+		<!--组件-->
+		<script>
+				Vue.component('pick_area', {
+				  props: ['item'],
+				  template: '<li>{{item.text}}</li>'
+				})
+		</script>
+		
+		<script>
+		var vm=new Vue({
+			el:"#box",
+			data:{
+				message:'hello world',
+				message2:'你好，中国',
+				seen:true,
+				arr:[
+					{id:1,text:'你好'},
+					{id:2,text:'世界'},
+					{id:3,text:'欢迎您'},
+				],
+				html:"<span style='color:red;'>你好，中国</span>",
+				id:'info_box',
+				attr:'class',
+				a:'hello',
+				b:'world'
+			},
+			beforeCreate:function(){
+				console.log(this.message);
+				this.tips();
+			},
+			created:function(){
+				console.log(this.message);
+				this.tips();
+			},
+			//计算属性/侦听属性(基于响应式依赖进行缓存的)
+			computed:{
+				change_message:function(){
+					return this.message.split('').reverse().join('');
+				},
+				fullName:{
+					get:function(){
+						return this.a+'-'+this.b
+					},
+					set:function(val){
+						var arr=val.split('-');
+						this.a=arr['0'];
+						this.b=arr['1'];
+					}
+				}
+			},
+			//方法
+			methods:{
+				tips:function(e){
+					console.log(123);
+				},
+				tips2:function(e){
+					console.log(e);
+				},
+				change_message2:function(){
+					return this.message.split('').reverse().join('');
+				}
+			}
+		});
+		</script>
+	</body>
+</html>

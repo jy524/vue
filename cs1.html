@@ -1,0 +1,154 @@
+<html>
+
+<head>
+    <title>练习</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="box">
+        <p>{{msg}}</p>
+
+        <p>
+            id:<input type="text" v-model='id' />
+            name:<input type="text" v-model='name' @keyup.113="add" />
+            <input type="button" value="写入" @click="add" />
+            <input type="text" v-model="keywords" v-focus v-color="'green'" />
+        </p>
+
+        <table cellspacing='0' cellpadding='0' border="1">
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>date</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="item in search()" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.date|dateReg}}</td>
+                <td>
+                    <a href="" @click.prevent="del(item.id)">删除</a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    //过滤器
+    Vue.filter('dateReg', function (date) {
+        var date = new Date(date)
+        var time = date.getFullYear()
+        time += '-' + ((date.getMonth() + 1).toString().padStart(2, '0'))
+        time += '-' + (date.getDate().toString().padStart(2, '0'))
+        time += " " + date.getHours()
+        time += ":" + date.getMinutes()
+        time += ":" + (date.getSeconds().toString().padStart(2, '0'))
+        return time
+    })
+    //自定义键盘修饰符
+    Vue.config.keyCodes.f2 = 113
+
+    //自定义指令
+    Vue.directive('focus', {
+        bind(el) {
+
+        },
+        inserted(el) {
+            el.focus()
+        },
+        updated() {
+
+        }
+
+    })
+    Vue.directive('color', {
+        bind(el, obj) {
+            el.style.color = obj.value
+            console.log(obj)
+        },
+        inserted(el) {
+
+        },
+        updated(el) {
+
+        }
+    })
+
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: '中华人名共和国',
+            id: '',
+            name: '',
+            keywords: '',
+            list: [{
+                id: 1,
+                name: '张飞',
+                date: new Date(),
+            }, {
+                id: 2,
+                name: '关羽',
+                date: new Date()
+            }]
+        },
+        methods: {
+            add() {
+                this.list.push({
+                    id: this.id,
+                    name: this.name,
+                    date: new Date()
+                })
+                this.id = this.name = ''
+            },
+            del(id) {
+                this.list.some((v, i) => {
+                    if (v.id == id) {
+                        console.log(this.list)
+                        this.list.splice(i, 1)
+                        return true
+                    }
+                })
+            },
+            search() {
+
+                //forEach、some、filter、findIndex、map
+                return this.list.filter(item => {
+                    return item.name.includes(this.keywords);
+                })
+            }
+        },
+        filters: {
+            dateReg(date, format) {
+                var date = new Date(date);
+                var time = date.getFullYear();
+                time += '-' + ((date.getMonth() + 1).toString().padStart(2, '0'))
+                time += '-' + (date.getDate().toString().padStart(2, '0'))
+                if (format == 'y-m-d') {
+
+                } else {
+                    time += ' ' + (date.getHours().toString().padStart(2, '0'));
+                    time += ':' + (date.getMinutes().toString().padStart(2, '0'));
+                    time += ':' + (date.getSeconds().toString().padStart(2, '0'));
+
+                }
+
+                return time
+            }
+        },
+        directives: {
+            model() {
+
+            },
+            'color': {
+                bind(el) {
+                    el.style.color = 'orange'
+                }
+            }
+        }
+    })
+</script>
+
+</html>

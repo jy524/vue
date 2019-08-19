@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <title>练习</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(100px)
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 10s ease;
+        }
+
+        span {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <p>{{msg}}</p>
+        <button @click="flag=!flag">移动</button>
+        <p>
+            <transition>
+                <span v-if="flag">hello world</span>
+            </transition>
+
+        </p>
+    </div>
+</body>
+<script>
+
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: '中华人名共和国',
+            flag: false
+        },
+
+    })
+</script>
+
+</html>
