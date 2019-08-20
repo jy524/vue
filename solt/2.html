@@ -12,6 +12,10 @@
             {{msg}}
         </p>
         <show_box>
+            <template slot-scope="user">
+                <p>{{user.data.name}}</p>
+            </template>
+
         </show_box>
     </div>
 
@@ -20,7 +24,7 @@
             <p>
                 {{msg}}
             </p>
-            <slot>{{user.nickname}}</slot>
+            <slot :data="user"></slot>
         </div>
     </template>
 </body>
