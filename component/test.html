@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>component练习</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+
+<body>
+    <div id="box">
+        <my-form @save="get_list"></my-form>
+        <div v-for="item in list" :key="item.id">
+            <el-row :row="item"></el-row>
+        </div>
+    </div>
+
+    <template id="el-row">
+        <p style="display: flex;justify-content:space-between;">
+            <span>{{row.desc}}</span>
+            <span style="background: pink;">{{row.name}}</span>
+        </p>
+    </template>
+
+    <template id="my-form">
+        <div>
+            <p>
+                <span>姓名：</span>
+                <input type="text" v-model="name" />
+            </p>
+            <p>
+                <span>名言：</span>
+                <textarea v-model='desc'></textarea>
+            </p>
+            <p>
+                <button @click="add_row">提交</button>
+            </p>
+        </div>
+    </template>
+</body>
+<script>
+    //定义组件
+    var vs = Vue.component('my-form', {
+        data() {
+            return {
+                name: '',
+                desc: ''
+            }
+        },
+        methods: {
+            add_row() {
+                let list = JSON.parse(localStorage.getItem('data') || '[]')
+                list.unshift({
+                    id: new Date().getTime(),
+                    name: this.name,
+                    desc: this.desc
+                })
+                localStorage.setItem('data', JSON.stringify(list))
+                this.$emit('save')
+            }
+        },
+        template: '#my-form'
+    })
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: '123',
+            list: [
+                { id: new Date().getTime(), name: '张三', desc: '回忆的青春' },
+                { id: new Date().getTime(), name: '李四', desc: '时光不散' },
+                { id: new Date().getTime(), name: '王五', desc: '最美的时光' },
+            ]
+        },
+        created() {
+            this.get_list()
+        },
+        methods: {
+            get_list() {
+                let list = JSON.parse(localStorage.getItem('data') || '[]')
+                this.list = list
+            }
+        },
+        filters: {},
+        directives: {},
+        components: {
+            "el-row": {
+                props: ['row'],
+                template: "#el-row"
+            }
+        }
+    })
+
+</script>
+
+</html>

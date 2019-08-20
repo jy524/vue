@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>插槽的学习</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="box">
+        <p>{{msg}}</p>
+        <com :url="'/pages/home'">
+            <template v-slot:header>
+                <p>世界如此美好，你却如此暴躁</p>
+            </template>
+            <p>花花世界，鸳鸯蝴蝶</p>
+            <template v-slot:footer>
+                <com2></com2>
+            </template>
+        </com>
+    </div>
+
+    <template id="show_box">
+        <div>
+            <slot name='header'>
+                <p style="color:red;">没有传值的时候的默认数据，支持文本和html标签</p>
+            </slot>
+            <p>大家好---{{url}}</p>
+            <main style="background: pink;">
+                <slot></slot>
+            </main>
+            <footer style="background: green;">
+                <slot name='footer'></slot>
+            </footer>
+
+        </div>
+    </template>
+</body>
+<script>
+    Vue.component('com', {
+        props: ['url'],
+        template: '#show_box'
+    })
+    Vue.component('com2', {
+        template: '<p>包含的子组件</p>'
+    })
+    var sm = new Vue({
+        el: '#box',
+        data: {
+            msg: '123'
+        }
+    })
+</script>
+
+</html>

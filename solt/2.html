@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>slot-scope</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="box">
+        <p>
+            {{msg}}
+        </p>
+        <show_box>
+        </show_box>
+    </div>
+
+    <template id='show_box'>
+        <div>
+            <p>
+                {{msg}}
+            </p>
+            <slot>{{user.nickname}}</slot>
+        </div>
+    </template>
+</body>
+
+<script>
+    Vue.component('show_box', {
+        data() {
+            return {
+                msg: '123',
+                user: {
+                    name: '张三',
+                    age: 12
+                }
+            }
+        },
+        template: '#show_box'
+    })
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: '你好',
+            user: {
+                name: '李四',
+                age: 32,
+                nickname: 'sir'
+            }
+        }
+    })
+</script>
+
+</html>
