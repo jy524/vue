@@ -1,0 +1,118 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>路由</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://libs.cdnjs.net/vue-router/3.1.2/vue-router.min.js"></script>
+</head>
+
+<body>
+    <div id="box">
+        <p>
+            <a href="#/login">登录</a>
+            <a href="#/register">注册</a>
+            <a href="#/box/1/2?x=1&y=2">携带参数的地址</a>
+        </p>
+        <div>
+            <p>使用router-link标签实现跳转</p>
+            <router-link to="/login">登录</router-link>
+            <router-link to="/register">注册</router-link>
+            <!-- 跳转命名路由 -->
+            <router-link :to="{name:'long',params:{id:123}}">二级路由地址</router-link>
+        </div>
+        <p>{{msg}}</p>
+        <router-view></router-view>
+    </div>
+
+    <template id="show_box">
+        <div>
+            <h2>
+                你好，中国
+                <p>路由参数：{{$route.params}}</p>
+                <p>地址参数：{{$route.query}}</p>
+                <p>{{$route.hash}}</p>
+            </h2>
+        </div>
+    </template>
+
+    <!-- 路由中使用路由 -->
+    <template id="box1">
+        <div>
+            <p>一级路由{{$route.name}}</p>
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <template id="box1_1">
+        <div>
+            <p>二级路由1_1{{$route.params}}</p>
+        </div>
+    </template>
+
+    <template id="box1_2">
+        <div>
+            <p>二级路由1_2</p>
+        </div>
+    </template>
+
+</body>
+<script>
+    let login = {
+        template: "<h1>登录组件</h1>"
+    }
+    let register = {
+        template: '<h1>注册组件</h1>'
+    }
+
+    let show_box = {
+        template: '#show_box'
+    }
+
+    let box1 = {
+        template: '#box1'
+    }
+    let box1_1 = {
+        template: '#box1_1'
+    }
+    let box1_2 = {
+        template: '#box1_2'
+    }
+
+    var obj = new VueRouter({
+        routes: [
+            {
+                path: '/login',
+                component: login
+            }, {
+                path: '/register',
+                component: register
+            }, {
+                path: '/box/:id/:pid',
+                component: show_box
+            }, {
+                path: '/show/:id',
+                component: box1,
+                children: [
+                    {
+                        path: 'info',
+                        name: 'long',
+                        component: box1_1
+                    }, {
+                        path: 'info2',
+                        component: box1_2
+                    }
+                ]
+            }
+        ]
+    })
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: 'router练习'
+        },
+        router: obj
+    })
+</script>
+
+</html>
