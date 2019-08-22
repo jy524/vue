@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>练习功能</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="box">
+        <p>
+            {{msg}}
+        </p>
+        <show ref="show_box" :a='1' :b='2' :c='3' :d='4' @x='show_info'></show>
+    </div>
+
+    <template id="show_box">
+        <div>
+            <input type="button" value="修改信息" @click="change_msg" />
+            <p>{{msg2}}</p>
+            <p>{{a}}</p>
+            <p>{{b}}</p>
+            <p>{{c}}</p>
+            <p>{{d}}</p>
+        </div>
+    </template>
+</body>
+<script>
+    var tmp = Vue.component('show', {
+        template: "#show_box",
+        props: ['a', 'b', 'c', 'd'],
+        data() {
+            return {
+                msg2: '子组件的元素'
+            }
+        },
+        methods: {
+            change_msg() {
+                this.$emit('x')
+            }
+        }
+    })
+    var vm = new Vue({
+        el: '#box',
+        data: {
+            msg: '123'
+        },
+        methods: {
+            show_info() {
+                console.log(this.$refs.show_box.msg2)
+            }
+        }
+    })
+</script>
+
+</html>
